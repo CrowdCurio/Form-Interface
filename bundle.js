@@ -243,6 +243,7 @@ $.widget('crowdcurio.FormInterface', {
         
         // water-temperature
         // how do I even
+        $("#water-temperature").append('Work in Progress');
         
         
         // air-temperature
