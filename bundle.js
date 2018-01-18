@@ -89,11 +89,10 @@ $.widget('crowdcurio.FormInterface', {
             results.forEach(function(data) {
                 that._renderInputForm(data);
             });
+            
+            that._renderYourDives();
         });
         
-        that._renderYourDives();
-        
-
         // attach the submit button handlers
         $("#submit-btn").click(function(e){
             that._submitResponse(e);
@@ -199,10 +198,14 @@ $.widget('crowdcurio.FormInterface', {
             
         });
         
+        
     },
     
     _renderYourDives : function() {
         var that = this;
+        
+        var headers = [];
+        var temp = that._submit_forms;
         
         var apiClient = that._getApiClient();
         // create table to hold the data
@@ -213,19 +216,19 @@ $.widget('crowdcurio.FormInterface', {
         var thead = $("<thead>").appendTo(table);
         
         var headerList = $("<tr>").appendTo(thead);
+        // Get the data items
         
-        headerList.append("<th> Dive Site </th>");
-        headerList.append("<th> Dive Shop </th>");
-        headerList.append("<th> Start Time </th>");
-        headerList.append("<th> Dive Time </th>");
-        headerList.append("<th> Dive Watch </th>");
-        headerList.append("<th> Water Temperature </th>");
-        headerList.append("<th> Air Temperature </th>");
-        headerList.append("<th> Comments </th>");
+        $.each(that._submit_forms, function(i, form) {
+            console.log(form);
+            headers.push(form[0].id);
+            headerList.append("<th>" + form[0].id + "</th>");
+        });
+        
+        console.log(headers);
         
         // load the data into the table
         apiClient.listAll('response', {},function(data) {
-            that._fillPrevDiveTable(data);
+            that._fillPrevDiveTable(data, headers);
         });
         
         // graph it somehow?
@@ -234,19 +237,14 @@ $.widget('crowdcurio.FormInterface', {
         
     },
     
-    _fillPrevDiveTable : function(data) {
+    _fillPrevDiveTable : function(data, headers) {
         var tbody = $("<tbody>").appendTo("#your-dives-table");
         
         data.forEach(function(ele) {
             var tableRow = $("<tr>").appendTo(tbody);
-            tableRow.append("<td>" + ele.content["dive-site"] + "</td>");
-            tableRow.append("<td>" + ele.content["dive-shop"] + "</td>");
-            tableRow.append("<td>" + ele.content["start-time"] + "</td>");
-            tableRow.append("<td>" + ele.content["dive-duration"] + "</td>");
-            tableRow.append("<td>" + ele.content["dive-watch"] + "</td>");
-            tableRow.append("<td>" + ele.content["water-temperature"] + "</td>");
-            tableRow.append("<td>" + ele.content["air-temperature"] + "</td>");
-            tableRow.append("<td>" + ele.content["comments"] + "</td>");
+            headers.forEach(function(header) {
+                tableRow.append("<td>" + ele.content[header] + "</td>");
+            });
         });
     },
     
@@ -254,32 +252,17 @@ $.widget('crowdcurio.FormInterface', {
     
         var that = this;
         
-        that._submit_forms.forEach(function(form) {
-            console.log(form.val());
-        });
+        var content = {}
         
-        // change the units all to celsius if they're fahrenheit
-        if($("#water-temperature-unit").val() === "fahrenheit") {
-            $("#water-temperature-form").val((parseFloat($("#water-temperature-form").val())-32)*.5556);
-        }
-        if($("#air-temperature-unit").val() === "fahrenheit") {
-            $("#air-temperature-form").val((parseFloat($("#air-temperature-form").val())-32)*.5556);
-        }
+        that._submit_forms.forEach(function(form) {
+            content[form.id] = form.val();
+        });
         
         // save a response through the api client
         /*
         var apiClient = that._getApiClient();
         apiClient.create('response', {
-                content: {
-                    'dive-site': $("#dive-site-form option:selected").text(),
-                    'dive-shop': $("#dive-shop-form").val(),
-                    'start-time': $("#start-time-form").val(),
-                    'dive-duration': $("#dive-time-form").val() ,
-                    'dive-watch': $("#device-form").val(),
-                    'water-temperature': $("#water-temperature-form").val(),
-                    'air-temperature': $("#air-temperature-form").val(),
-                    'comments' : $("#comments-form").val()
-                }
+                content: content
             }, function(result){
                 that._responseSubmitted();
         });
