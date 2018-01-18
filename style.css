@@ -1,0 +1,138 @@
+body{
+    background-color: #034f84;
+    color: #FFFFFF;
+}
+
+div.nav-bar {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70em;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+a.nav-bar {
+    margin: 15px;
+    font-size: 25pt;
+}
+
+div.d40 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align: center;
+}
+
+div.submit-a-dive {
+    max-width: 70em;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #034f84;
+}
+
+select {
+    display: inline-block;
+    color: #000000;
+}
+
+option {
+    display: inline-block;
+}
+
+input {
+    
+    background-color: #f2f2f2;
+    
+}
+
+textarea {
+    background-color: #eaeaea;
+    color: #000000;
+}
+
+table {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+}
+th {
+    background-color: #333;
+    color: #FFF;
+}
+
+tr {
+    background-color: #ccc;
+    color: #000;
+}
+
+tr:nth-of-type(2n+1) {
+
+    background: #888;
+    color: #FFF;
+
+}
+
+@media screen and ( max-width: 80em) {
+    
+    div.nav-bar {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    div.submit-a-dive {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+            display: block;
+            opacity: 0%;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+    }
+
+    tr { border: 1px solid #111; }
+    
+    tr:nth-of-type(2n+1) {
+
+        background: #444;
+        color: #FFF;
+
+    }
+
+    td { 
+            /* Behave  like a "row" */
+            border: none;
+            border-bottom: 1px solid #111; 
+            position: relative;
+            padding-left: 50%; 
+    }
+
+    td:before { 
+            /* Now like a table header */
+            position: absolute;
+            /* Top/left values mimic padding */
+            top: 6px;
+            left: 6px;
+            width: 45%; 
+            padding-right: 10px; 
+            white-space: nowrap;
+    }
+
+    /*
+    Label the data
+    */
+    td:nth-of-type(1):before { content: "Dive Site"; }
+    td:nth-of-type(2):before { content: "Dive Shop"; }
+    td:nth-of-type(3):before { content: "Start Time"; }
+    td:nth-of-type(4):before { content: "Dive Time"; }
+    td:nth-of-type(5):before { content: "Dive Watch"; }
+    td:nth-of-type(6):before { content: "Water Temperature"; }
+    td:nth-of-type(7):before { content: "Air Temperature"; }
+    td:nth-of-type(8):before { content: "Comments"; }
+}
